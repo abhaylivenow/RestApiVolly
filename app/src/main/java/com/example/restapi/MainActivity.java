@@ -62,7 +62,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                weatherDataService.getCityForecastById("44418");
+                weatherDataService.getCityForecastById(edtEnterDetail.getText().toString(), new WeatherDataService.ForecastByIdResponse() {
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(WeatherReportModel weatherReportModel) {
+                        Toast.makeText(MainActivity.this, weatherReportModel.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });

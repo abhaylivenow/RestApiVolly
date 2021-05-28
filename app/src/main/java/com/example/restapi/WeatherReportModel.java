@@ -16,6 +16,10 @@ public class WeatherReportModel {
     private float visibility;
     private int predictability;
 
+    public WeatherReportModel(){
+
+    }
+
     public WeatherReportModel(String id, String weather_state_name, String weather_state_abbr, String wind_direction_compass, String created, String applicable_date, float min_temp, float max_temp, float wind_speed, float wind_direction, float air_pressure, int humidity, float visibility, int predictability) {
         this.id = id;
         this.weather_state_name = weather_state_name;
