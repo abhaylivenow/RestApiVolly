@@ -39,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
         edtEnterDetail = findViewById(R.id.edt_enterDetails);
         listViewDetails = findViewById(R.id.listViewDetails);
 
+        final WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this);
+
         btnGetCityId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this);
                 weatherDataService.getCityId(edtEnterDetail.getText().toString(), new WeatherDataService.VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         btnGetWeatherById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                weatherDataService.getCityForecastById("44418");
 
             }
         });
