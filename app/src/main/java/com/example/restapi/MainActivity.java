@@ -42,46 +42,10 @@ public class MainActivity extends AppCompatActivity {
         btnGetCityId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                String url = "https://www.metaweather.com/api/location/search/?query=" + edtEnterDetail.getText().toString();
+                WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this);
+                String cityId = weatherDataService.getCityId(edtEnterDetail.getText().toString());
 
-                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        String cityID = "";
-                        try {
-                            JSONObject cityInfo = response.getJSONObject(0);
-                            cityID = cityInfo.getString("woeid");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Toast.makeText(MainActivity.this, cityID, Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
-                // Request a string response from the provided URL.
-                // this is a simple request (not usable since we need json object but it returns String)
-//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                        new Response.Listener<String>() {
-//                            @Override
-//                            public void onResponse(String response) {
-//                                Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-//                            }
-//                        }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-                // Add the request to the RequestQueue.
+                Toast.makeText(MainActivity.this, cityId, Toast.LENGTH_SHORT).show();
             }
         });
 
