@@ -23,9 +23,14 @@ public class WeatherDataService {
         this.context = context;
     }
 
+    public interface VolleyResponseListener{
+        void onError(String message);
+        void onResponse(String cityID);
+    }
+
     public static final String QUERY_URL = "https://www.metaweather.com/api/location/search/?query=";
 
-    public String getCityId(String cityName){
+    public void getCityId(final String cityName , final VolleyResponseListener volleyResponseListener){
         String url = QUERY_URL + cityName;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -39,18 +44,20 @@ public class WeatherDataService {
                     e.printStackTrace();
                 }
 
-                Toast.makeText(context, cityID, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, cityID, Toast.LENGTH_SHORT).show();
+                volleyResponseListener.onResponse(cityID);
             }
         },  new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                volleyResponseListener.onError("Something went wrong");
             }
         });
 
         MySingleton.getInstance(context).addToRequestQueue(request);
 
-        return cityID;
+//        return cityID;
     }
 
 //    public List<WeatherReportModel> getCityForecastById(String cityId){
