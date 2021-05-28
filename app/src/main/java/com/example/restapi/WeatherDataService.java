@@ -65,11 +65,11 @@ public class WeatherDataService {
 
     public interface ForecastByIdResponse{
         void onError(String message);
-        void onResponse(WeatherReportModel weatherReportModel);
+        void onResponse(List<WeatherReportModel> weatherReportModel);
     }
 
     public void getCityForecastById(String cityId, final ForecastByIdResponse forecastByIdResponse){
-        List<WeatherReportModel> report = new ArrayList<>();
+        final List<WeatherReportModel> weatherReportModels = new ArrayList<>();
         String url = QUERY_FOR_CITY_WEATHER_BY_ID + cityId;
 
         // get the json object
@@ -81,28 +81,33 @@ public class WeatherDataService {
                 try {
                     JSONArray consolidateWeatherList = response.getJSONArray("consolidated_weather");
 
-                    WeatherReportModel firstDay = new WeatherReportModel();
+                    for(int i=0;i<consolidateWeatherList.length();i++) {
 
-                    JSONObject firstDayFromApi = (JSONObject) consolidateWeatherList.get(0);
+                        WeatherReportModel oneDayWeather = new WeatherReportModel();
 
-                    firstDay.setId(firstDayFromApi.getString("id"));
-                    firstDay.setWeather_state_name(firstDayFromApi.getString("weather_state_name"));
-                    firstDay.setWeather_state_abbr(firstDayFromApi.getString("weather_state_abbr"));
-                    firstDay.setWind_direction_compass(firstDayFromApi.getString("wind_direction_compass"));
-                    firstDay.setCreated(firstDayFromApi.getString("created"));
-                    firstDay.setApplicable_date(firstDayFromApi.getString("applicable_date"));
+                        JSONObject firstDayFromApi = (JSONObject) consolidateWeatherList.get(i);
 
-                    firstDay.setMin_temp(firstDayFromApi.getLong("min_temp"));
-                    firstDay.setMax_temp(firstDayFromApi.getLong("max_temp"));
-                    firstDay.setWind_speed(firstDayFromApi.getLong("wind_speed"));
-                    firstDay.setWind_direction(firstDayFromApi.getLong("wind_direction"));
-                    firstDay.setAir_pressure(firstDayFromApi.getLong("air_pressure"));
-                    firstDay.setVisibility(firstDayFromApi.getLong("visibility"));
+                        oneDayWeather.setId(firstDayFromApi.getString("id"));
+                        oneDayWeather.setWeather_state_name(firstDayFromApi.getString("weather_state_name"));
+                        oneDayWeather.setWeather_state_abbr(firstDayFromApi.getString("weather_state_abbr"));
+                        oneDayWeather.setWind_direction_compass(firstDayFromApi.getString("wind_direction_compass"));
+                        oneDayWeather.setCreated(firstDayFromApi.getString("created"));
+                        oneDayWeather.setApplicable_date(firstDayFromApi.getString("applicable_date"));
 
-                    firstDay.setHumidity(firstDayFromApi.getInt("humidity"));
-                    firstDay.setPredictability(firstDayFromApi.getInt("predictability"));
+                        oneDayWeather.setMin_temp(firstDayFromApi.getLong("min_temp"));
+                        oneDayWeather.setMax_temp(firstDayFromApi.getLong("max_temp"));
+                        oneDayWeather.setWind_speed(firstDayFromApi.getLong("wind_speed"));
+                        oneDayWeather.setWind_direction(firstDayFromApi.getLong("wind_direction"));
+                        oneDayWeather.setAir_pressure(firstDayFromApi.getLong("air_pressure"));
+                        oneDayWeather.setVisibility(firstDayFromApi.getLong("visibility"));
 
-                    forecastByIdResponse.onResponse(firstDay);
+                        oneDayWeather.setHumidity(firstDayFromApi.getInt("humidity"));
+                        oneDayWeather.setPredictability(firstDayFromApi.getInt("predictability"));
+
+                        weatherReportModels.add(oneDayWeather);
+                    }
+
+                    forecastByIdResponse.onResponse(weatherReportModels);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
