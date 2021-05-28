@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         btnGetCityId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+//                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                 String url = "https://www.metaweather.com/api/location/search/?query=" + edtEnterDetail.getText().toString();
 
                 JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                queue.add(request);
+                MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
                 // Request a string response from the provided URL.
                 // this is a simple request (not usable since we need json object but it returns String)
 //                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
