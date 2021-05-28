@@ -125,9 +125,38 @@ public class WeatherDataService {
 
         MySingleton.getInstance(context).addToRequestQueue(request);
     }
-//
-//    public List<WeatherReportModel> getCityForecastByName(String cityName){
-//
-//    }
+
+    public interface GetCityForecastByCityNameCallBack{
+        void onError(String message);
+        void onResponse(List<WeatherReportModel> weatherReportModels);
+    }
+
+    public void getCityForecastByName(String cityName , final GetCityForecastByCityNameCallBack getCityForecastByCityNameCallBack){
+        // fetch the city id given by the city name
+        // fetch the city forecast by given city Id.
+        getCityId(cityName, new VolleyResponseListener() {
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onResponse(String cityID) {
+                // now we have he city ID
+                getCityForecastById(cityID, new ForecastByIdResponse() {
+                    @Override
+                    public void onError(String message) {
+
+                    }
+
+                    @Override
+                    public void onResponse(List<WeatherReportModel> weatherReportModel) {
+                        // we have the weather report
+                        getCityForecastByCityNameCallBack.onResponse(weatherReportModel);
+                    }
+                });
+            }
+        });
+    }
 
 }
